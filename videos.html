@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vídeos | Matheus Films</title>
+  <meta name="description" content="Produções audiovisuais — casamentos, eventos corporativos e muito mais." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/inner.css" />
+  <style>
+    /* ── ESTILOS PREMIUM DO PLAYER DE VÍDEO PRINCIPAL ── */
+    .custom-video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 8px; /* Bordas suaves */
+      overflow: hidden;
+      background-color: #000;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); /* Sombra elegante */
+      border: 1px solid rgba(255, 255, 255, 0.08); /* Borda muito sutil, não amarela grossa */
+    }
+
+    .custom-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Correção do Destaque: Isolado e Posicionado Corretamente */
+    #playerFeatBadge {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      z-index: 10; /* Garante que fique acima do vídeo */
+      display: inline-block !important; /* Impede que se transforme numa barra gigante */
+    }
+
+    .video-controls-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+      padding: 25px 20px 15px 20px;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      display: flex; flex-direction: column; gap: 12px;
+      pointer-events: auto; z-index: 3;
+    }
+
+    .footer-gradient {
+      width: 100%; height: 150px;
+      background: linear-gradient(to bottom, rgba(5, 5, 5, 0) 0%, rgba(5, 5, 5, 1) 100%);
+      margin-top: 50px;
+    }
+
+    .custom-video-container:hover .video-controls-overlay { opacity: 1; }
+
+    .progress-timeline {
+      position: relative; width: 100%; height: 4px;
+      background: rgba(255, 255, 255, 0.1); border-radius: 2px;
+      cursor: pointer; transition: height 0.2s ease;
+    }
+    .progress-timeline:hover { height: 6px; }
+
+    .progress-bar-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #aa771c, #f3e5ab);
+      border-radius: 2px; position: relative;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    .controls-buttons-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .controls-left-group, .controls-right-group { display: flex; align-items: center; gap: 15px; }
+
+    .player-btn {
+      background: none; border: none; color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 5px; transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .player-btn:hover { color: #d4af37; transform: scale(1.1); }
+    .player-btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .player-btn.play-pause-btn svg { width: 22px; height: 22px; }
+
+    .video-time-display { font-family: 'Inter', sans-serif; font-size: 12px; color: #bbb; font-weight: 500; user-select: none; }
+    .volume-container { display: flex; align-items: center; gap: 8px; }
+
+    .volume-slider {
+      -webkit-appearance: none; appearance: none;
+      width: 60px; height: 4px; background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #d4af37; cursor: pointer;
+    }
+
+    video::-webkit-media-controls { display: none !important; }
+
+    /* ── CORREÇÃO DA GRADE DOS CARDS DE VÍDEO ── */
+    .vcard { cursor: pointer !important; outline: none !important; border: none !important; }
+    
+    .vcard-thumb {
+      position: relative !important; width: 100% !important; aspect-ratio: 16 / 9 !important;
+      border-radius: 6px !important; overflow: hidden !important;
+      transition: all 0.4s ease !important;
+    }
+
+    .vcard-thumb img {
+      position: absolute !important; top: 0 !important; left: 0 !important;
+      width: 100% !important; height: 100% !important; object-fit: cover !important;
+    }
+
+    .video-grid {
+      display: grid !important; grid-template-columns: repeat(3, 1fr) !important;
+      gap: 30px !important; max-width: 1200px !important; margin: 0 auto !important;
+    }
+
+    @media (max-width: 900px) { .video-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 600px) { .video-grid { grid-template-columns: 1fr !important; } }
+
+    /* ── ESTILOS DO BOTÃO DO WHATSAPP ── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #25d366;
+      color: #fff;
+      border-radius: 50px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+      z-index: 9999;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .whatsapp-float:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body class="inner-page">
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="nav-logo" id="nav-logo">MTHSFILMS</a>
+    <ul class="nav-links" id="nav-menu">
+      <li><a href="index.html" class="nav-link">INÍCIO</a></li>
+      <li><a href="videos.html" class="nav-link active">VÍDEOS</a></li>
+      <li><a href="fotografia.html" class="nav-link">FOTOS</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <header class="inner-hero" id="inner-hero">
+    <div class="inner-hero-bg">
+      <img src="assets/images/imagesamira.jpeg" alt="" aria-hidden="true" id="heroHeroImage" />
+      <div class="inner-hero-overlay"></div>
+    </div>
+    <div class="inner-hero-content">
+      <span class="inner-tag">Produções Audiovisuais</span>
+      <h1 class="inner-title">Coleção de <em>Vídeos</em></h1>
+      <p class="inner-subtitle">Casamentos · Eventos · Corporativo · Documentários</p>
+    </div>
+  </header>
+
+  <section class="featured-section" aria-label="Vídeo em destaque" style="padding: 60px 0 40px; max-width: 1200px; margin: 0 auto;">
+    <div class="featured-video reveal" style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+
+      <div class="featured-thumb" style="width: 100%; padding: 0 52px; margin: 0 auto; aspect-ratio: 16/9;">
+        <div class="custom-video-container" id="videoPlayerContainer">
+          
+          <video id="mainVideo" playsinline autoplay loop muted poster="assets/images/imagesamira.jpeg">
+            <source src="assets/videos/samira-e-valmir.mp4" type="video/mp4">
+          </video>
+
+          <span class="feat-badge" id="playerFeatBadge">★ Destaque</span>
+
+          <div class="video-controls-overlay">
+            <div class="progress-timeline" id="progressTimeline">
+              <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+
+            <div class="controls-buttons-row">
+              <div class="controls-left-group">
+                <button class="player-btn play-pause-btn" id="playPauseBtn" aria-label="Play">
+                  <svg id="playIcon" viewBox="0 0 24 24" style="display: none;"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                  <svg id="pauseIcon" viewBox="0 0 24 24" style="display: block;"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
+                </button>
+
+                <div class="volume-container">
+                  <button class="player-btn" id="muteBtn" aria-label="Mudar volume">
+                    <svg id="volumeIcon" viewBox="0 0 24 24" style="display: none;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 6.71-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" /></svg>
+                    <svg id="muteIcon" viewBox="0 0 24 24" style="display: block;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" /></svg>
+                  </button>
+                  <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0">
+                </div>
+
+                <div class="video-time-display"><span id="currentTime">0:00</span> / <span id="durationTime">0:00</span></div>
+              </div>
+
+              <div class="controls-right-group">
+                <button class="player-btn" id="fullscreenBtn" aria-label="Tela Cheia">
+                  <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" /></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-info" style="width: 100%; padding: 0 52px; margin: 0 auto; text-align: left;">
+        <p class="feat-eyebrow" style="margin-bottom: 8px;">
+          <span id="featBadgeText" style="color: #d4af37; font-weight: 800; letter-spacing: 2px;">★ EM DESTAQUE</span>
+          <span class="feat-eyebrow-sep" style="color: #444; margin: 0 10px;">—</span>
+          <span id="featCategory" style="color: #888; font-size: 11px; letter-spacing: 2px;">CASAMENTO</span>
+        </p>
+        <h2 id="featTitle" class="feat-title" style="font-size: 36px; margin-bottom: 12px; font-weight: 800; font-family: 'Montserrat', sans-serif;">Samira &amp; Valmir | O Filme</h2>
+        <p id="featDesc" class="feat-desc" style="max-width: 800px; color: #aaa; font-size: 15px; line-height: 1.7; margin-bottom: 15px;">Uma produção cinematográfica impecável que eterniza cada olhar, a emoção espontânea e os momentos mais marcantes desse dia único na vida do casal.</p>
+        <div class="feat-meta" style="display: flex; gap: 20px; color: #666; font-size: 13px; font-weight: 600;">
+          <span id="featDuration" class="feat-meta-item">⏱ 50s</span>
+          <span id="featQuality" class="feat-meta-item">🎬 4K</span>
+          <span id="featLocation" class="feat-meta-item">📍 Brasil</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="collections-section" aria-label="Coleções de vídeos">
+    <div class="col-header reveal">
+      <span class="col-label">COLEÇÕES</span>
+    </div>
+    <div class="filter-tabs reveal" role="tablist" aria-label="Filtrar coleções">
+      <button class="ftab active" data-filter="all" role="tab" aria-selected="true">TODOS <span class="ftab-count">3</span></button>
+      <button class="ftab" data-filter="casamento" role="tab" aria-selected="false">CASAMENTOS <span class="ftab-count">1</span></button>
+      <button class="ftab" data-filter="corporativo" role="tab" aria-selected="false">CORPORATIVO <span class="ftab-count">1</span></button>
+      <button class="ftab" data-filter="evento" role="tab" aria-selected="false">EVENTOS <span class="ftab-count">1</span></button>
+    </div>
+
+    <div class="video-grid">
+      <article class="vcard reveal vcard--active" data-cat="casamento" tabindex="0" data-is-featured="true"
+        data-src="assets/videos/samira-e-valmir.mp4"
+        data-poster="assets/images/imagesamira.jpeg"
+        data-title="Samira &amp; Valmir | O Filme"
+        data-category="CASAMENTO"
+        data-desc="Uma produção cinematográfica impecável que eterniza cada olhar, a emoção espontânea e os momentos mais marcantes desse dia único na vida do casal."
+        data-duration="⏱ 50s"
+        data-quality="🎬 4K"
+        data-location="📍 Brasil">
+        <div class="vcard-thumb">
+          <img src="assets/images/imagesamira.jpeg" alt="Casamento Samira e Valmir" loading="lazy" />
+          <div class="vcard-overlay"><button class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg></button></div>
+          <span class="vcard-badge">★ Destaque</span>
+        </div>
+        <div class="vcard-info">
+          <span class="vcard-cat">Casamento</span>
+          <h3>Samira & Valmir</h3>
+        </div>
+      </article>
+
+      <article class="vcard reveal" data-cat="corporativo" tabindex="0" data-is-featured="false"
+        data-src="assets/videos/Congresso(2).mp4"
+        data-poster="assets/images/image 31.jpeg"
+        data-title="Corporativo Congresso Brasileiro de TDAH • 2026"
+        data-category="CORPORATIVO"
+        data-desc="Um evento corporativo de alto impacto registrado com qualidade cinematográfica. Cada palestra, networking e momento de conexão eternizados com precisão."
+        data-duration="⏱ 8 min"
+        data-quality="🎬 4K"
+        data-location="📍 São Paulo">
+        <div class="vcard-thumb">
+          <img src="assets/images/image 31.jpeg" alt="Congresso TDAH" loading="lazy" />
+          <div class="vcard-overlay"><button class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg></button></div>
+        </div>
+        <div class="vcard-info">
+          <span class="vcard-cat">Corporativo</span>
+          <h3>Congresso Brasileiro de TDAH • 2026</h3>
+        </div>
+      </article>
+
+      <article class="vcard reveal" data-cat="evento" tabindex="0" data-is-featured="false"
+        data-src="assets/videos/Kátia Diadec 02.mp4"
+        data-poster="assets/images/image32.jpeg"
+        data-title="DIADEC • 2026"
+        data-category="EVENTO"
+        data-desc="A energia e a emoção de um dos maiores festivais culturais do país capturados em imagens que transmitem toda a atmosfera do evento."
+        data-duration="⏱ 6 min"
+        data-quality="🎬 1080p"
+        data-location="📍 São Paulo">
+        <div class="vcard-thumb">
+          <img src="assets/images/image32.jpeg" alt="DIADEC • 2026" loading="lazy" />
+          <div class="vcard-overlay"><button class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg></button></div>
+        </div>
+        <div class="vcard-info">
+          <span class="vcard-cat">Evento</span>
+          <h3>DIADEC • 2026</h3>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="footer-gradient"></div>
+
+  <a href="https://wa.me/5527997358236" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Solicite um orçamento via WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.405-.883-.733-1.48-1.638-1.653-1.935-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.28 5.28 0 0 0-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
+    Solicite um Orçamento
+  </a>
+
+  <script src="assets/js/inner.js"></script>
+
+  <script>
+    const video = document.getElementById('mainVideo');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const progressTimeline = document.getElementById('progressTimeline');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationTimeEl = document.getElementById('durationTime');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const muteIcon = document.getElementById('muteIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const videoPlayerContainer = document.getElementById('videoPlayerContainer');
+
+    function togglePlay() {
+      if (video.paused) {
+        video.play();
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      } else {
+        video.pause();
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      }
+    }
+
+    playPauseBtn.addEventListener('click', togglePlay);
+    video.addEventListener('click', togglePlay);
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "0:00";
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    video.addEventListener('timeupdate', () => {
+      const percentage = (video.currentTime / video.duration) * 100;
+      progressBarFill.style.width = `${percentage}%`;
+      currentTimeEl.textContent = formatTime(video.currentTime);
+    });
+
+    video.addEventListener('loadedmetadata', () => {
+      durationTimeEl.textContent = formatTime(video.duration);
+    });
+
+    progressTimeline.addEventListener('click', (e) => {
+      const timelineWidth = progressTimeline.clientWidth;
+      const clickX = e.offsetX;
+      const duration = video.duration;
+      video.currentTime = (clickX / timelineWidth) * duration;
+    });
+
+    volumeSlider.addEventListener('input', (e) => {
+      video.volume = e.target.value;
+      if (video.volume === 0) {
+        volumeIcon.style.display = 'none';
+        muteIcon.style.display = 'block';
+      } else {
+        volumeIcon.style.display = 'block';
+        muteIcon.style.display = 'none';
+        video.muted = false;
+      }
+    });
+
+    muteBtn.addEventListener('click', () => {
+      if (video.muted) {
+        video.muted = false;
+        volumeSlider.value = video.volume;
+        volumeIcon.style.display = 'block';
+        muteIcon.style.display = 'none';
+      } else {
+        video.muted = true;
+        volumeSlider.value = 0;
+        volumeIcon.style.display = 'none';
+        muteIcon.style.display = 'block';
+      }
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        if (videoPlayerContainer.requestFullscreen) videoPlayerContainer.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    /* ── TROCA DINÂMICA DE VÍDEO AO CLICAR NO CARD ── */
+    (function () {
+      const mainVideo = document.getElementById('mainVideo');
+      const featCategory = document.getElementById('featCategory');
+      const featTitle = document.getElementById('featTitle');
+      const featDesc = document.getElementById('featDesc');
+      const featDuration = document.getElementById('featDuration');
+      const featQuality = document.getElementById('featQuality');
+      const featLocation = document.getElementById('featLocation');
+      const featuredSection = document.querySelector('.featured-section');
+      const playerFeatBadge = document.getElementById('playerFeatBadge');
+      const featBadgeText = document.getElementById('featBadgeText');
+      const heroHeroImage = document.getElementById('heroHeroImage');
+
+      function setActiveCard(card) {
+        document.querySelectorAll('.vcard').forEach(c => c.classList.remove('vcard--active'));
+        card.classList.add('vcard--active');
+      }
+
+      function loadVideoFromCard(card) {
+        const src = card.getAttribute('data-src');
+        const poster = card.getAttribute('data-poster');
+        const title = card.getAttribute('data-title');
+        const category = card.getAttribute('data-category');
+        const desc = card.getAttribute('data-desc');
+        const duration = card.getAttribute('data-duration');
+        const quality = card.getAttribute('data-quality');
+        const location = card.getAttribute('data-location');
+        const isFeatured = card.getAttribute('data-is-featured') === 'true';
+
+        if (!src) return;
+
+        mainVideo.pause();
+        mainVideo.src = src;
+        if (poster) {
+            mainVideo.poster = poster;
+            if (heroHeroImage) heroHeroImage.src = poster;
+        }
+        mainVideo.load();
+
+        progressBarFill.style.width = '0%';
+        currentTimeEl.textContent = '0:00';
+        durationTimeEl.textContent = '0:00';
+
+        mainVideo.play().catch(error => console.log("Autoplay bloqueado:", error));
+
+        if (isFeatured) {
+          playerFeatBadge.style.display = 'inline-block';
+          if (featBadgeText) featBadgeText.textContent = '★ EM DESTAQUE';
+        } else {
+          playerFeatBadge.style.display = 'none';
+          if (featBadgeText) featBadgeText.textContent = '▶ ASSISTINDO AGORA';
+        }
+
+        if (featCategory) featCategory.textContent = category || '';
+        if (featTitle) featTitle.innerHTML = title || '';
+        if (featDesc) featDesc.textContent = desc || '';
+        if (featDuration) featDuration.textContent = duration || '';
+        if (featQuality) featQuality.textContent = quality || '';
+        if (featLocation) featLocation.textContent = location || '';
+
+        setActiveCard(card);
+        featuredSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      document.querySelectorAll('.vcard').forEach(card => {
+        card.addEventListener('click', function() {
+          loadVideoFromCard(this);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
