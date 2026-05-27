@@ -33,13 +33,16 @@
       display: block;
     }
 
-    /* Correção do Destaque: Isolado e Posicionado Corretamente */
+    /* Correção Definitiva do Destaque */
     #playerFeatBadge {
-      position: absolute;
-      top: 25px;
-      left: 25px;
-      z-index: 10; /* Garante que fique acima do vídeo */
-      display: inline-block !important; /* Impede que se transforme numa barra gigante */
+      position: absolute !important;
+      top: 25px !important;
+      left: 25px !important;
+      z-index: 10 !important;
+      width: max-content !important; 
+      padding: 6px 15px !important;
+      display: inline-block !important;
+      white-space: nowrap !important;
     }
 
     .video-controls-overlay {
@@ -253,11 +256,12 @@
     <div class="col-header reveal">
       <span class="col-label">COLEÇÕES</span>
     </div>
+    
     <div class="filter-tabs reveal" role="tablist" aria-label="Filtrar coleções">
-      <button class="ftab active" data-filter="all" role="tab" aria-selected="true">TODOS <span class="ftab-count">3</span></button>
+      <button class="ftab active" data-filter="all" role="tab" aria-selected="true">TODOS <span class="ftab-count">4</span></button>
       <button class="ftab" data-filter="casamento" role="tab" aria-selected="false">CASAMENTOS <span class="ftab-count">1</span></button>
       <button class="ftab" data-filter="corporativo" role="tab" aria-selected="false">CORPORATIVO <span class="ftab-count">1</span></button>
-      <button class="ftab" data-filter="evento" role="tab" aria-selected="false">EVENTOS <span class="ftab-count">1</span></button>
+      <button class="ftab" data-filter="evento" role="tab" aria-selected="false">EVENTOS <span class="ftab-count">2</span></button>
     </div>
 
     <div class="video-grid">
@@ -318,6 +322,26 @@
           <h3>DIADEC • 2026</h3>
         </div>
       </article>
+
+      <article class="vcard reveal" data-cat="evento" tabindex="0" data-is-featured="false"
+        data-src="assets/videos/conectados.mp4"
+        data-poster="assets/images/conectados.jpeg"
+        data-title="CONECTADOS • 2026"
+        data-category="EVENTO"
+        data-desc="A cobertura completa com os melhores momentos e toda a energia incrível do CONECTADOS 2026. Uma produção dinâmica e envolvente."
+        data-duration="⏱ 3 min"
+        data-quality="🎬 4K"
+        data-location="📍 Brasil">
+        <div class="vcard-thumb">
+          <img src="assets/images/conectados.jpeg" alt="CONECTADOS 2026" loading="lazy" />
+          <div class="vcard-overlay"><button class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg></button></div>
+        </div>
+        <div class="vcard-info">
+          <span class="vcard-cat">Evento</span>
+          <h3>CONECTADOS • 2026</h3>
+        </div>
+      </article>
+
     </div>
   </section>
 
