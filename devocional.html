@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Álbum Devocional | Matheus Films</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/inner.css" />
+  
+  <style>
+    .photo-gallery-section { padding-top: 40px; }
+    .photo-grid { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+      gap: 16px; padding: 0 52px 80px; max-width: 1400px; margin: 0 auto; 
+    }
+    .photo-item { 
+      aspect-ratio: 3/2; overflow: hidden; border-radius: 8px; cursor: pointer; 
+      background: #1a1a1a; border: 2px solid transparent; transition: all 0.3s ease; 
+      content-visibility: auto; contain-intrinsic-size: 300px 200px;
+    }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .photo-item:hover { border-color: #e5b63a; box-shadow: 0 0 20px rgba(229, 182, 58, 0.4); transform: translateY(-5px); z-index: 2; }
+    .photo-item:hover img { transform: scale(1.05); }
+
+    .hero-btn-back { 
+      display: inline-block; margin-top: 25px; color: #aaa; text-decoration: none; 
+      font-size: 11px; text-transform: uppercase; letter-spacing: 2px; 
+      transition: color 0.3s; font-family: 'Inter', sans-serif;
+    }
+    .hero-btn-back:hover { color: #e5b63a; }
+
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .lightbox.open { display: flex; opacity: 1; }
+    .lightbox-img { max-width: 90vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .lightbox-close { position: absolute; top: 30px; right: 40px; font-size: 40px; color: #fff; cursor: pointer; background: none; border: none; transition: color 0.3s ease; }
+    .lightbox-close:hover { color: #e5b63a; }
+
+    /* RODAPÉ E WHATSAPP */
+    .site-footer { background-color: #050505; padding: 40px 20px 60px; text-align: center; position: relative; z-index: 10; border-top: 1px solid rgba(212, 175, 55, 0.25); }
+    .footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-brand { font-family: 'Playfair Display', serif; color: #d4af37; font-size: 24px; font-weight: 700; letter-spacing: 1px; margin: 0; }
+    .footer-social { display: flex; gap: 24px; align-items: center; }
+    .footer-social a { color: #aaa; transition: color 0.3s ease, transform 0.3s ease; display: flex; }
+    .footer-social a:hover { color: #d4af37; transform: scale(1.1); }
+    .footer-social svg { width: 22px; height: 22px; }
+    .footer-contact { color: #ccc; font-family: 'Inter', sans-serif; font-size: 14px; margin: 0; }
+    .footer-copy { color: #555; font-family: 'Inter', sans-serif; font-size: 12px; margin: 0; margin-top: 10px; }
+    .whatsapp-float { position: fixed; bottom: 30px; right: 30px; background-color: #25d366; color: #fff; border-radius: 50px; padding: 12px 24px; display: flex; align-items: center; gap: 10px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; text-decoration: none; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 9999; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .whatsapp-float:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); color: #fff; }
+
+    @media (max-width: 768px) {
+      .photo-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); padding: 0 24px 60px; }
+      .whatsapp-float { bottom: 20px; right: 20px; padding: 10px 20px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body class="inner-page">
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">MTHSFILMS</a>
+    <ul class="nav-links">
+      <li><a href="index.html">INÍCIO</a></li>
+      <li><a href="videos.html">VÍDEOS</a></li>
+      <li><a href="fotografia.html" class="active">FOTOS</a></li>
+    </ul>
+  </nav>
+
+  <header class="inner-hero" style="min-height: 40vh;">
+    <div class="inner-hero-bg">
+      <img src="assets/images/devocional/dev (1).jpg" alt="Capa Devocional" />
+      <div class="inner-hero-overlay"></div>
+    </div>
+    <div class="inner-hero-content">
+      <h1 class="inner-title">Devocional</h1>
+      <p class="inner-subtitle">Um momento de conexão e fé registrado através de nossas lentes.</p>
+      
+      <a href="fotografia.html" class="hero-btn-back">← VOLTAR PARA COLEÇÕES</a>
+    </div>
+  </header>
+
+  <section class="photo-gallery-section">
+    <div class="photo-grid" id="galeria-fotos"></div>
+  </section>
+
+  <div class="footer-gradient" style="height: 150px; background: linear-gradient(to bottom, transparent, #050505);"></div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <h3 class="footer-brand">Matheus Films</h3>
+      <div class="footer-social">
+        <a href="https://instagram.com/mthsmartins_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://wa.me/5527997358236" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        </a>
+      </div>
+      <p class="footer-contact">contato@matheusfilms.com</p>
+      <p class="footer-copy">&copy; 2026 Matheus Films. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/5527997358236" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Solicite um orçamento via WhatsApp">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.405-.883-.733-1.48-1.638-1.653-1.935-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.28 5.28 0 0 0-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+    Solicite um Orçamento
+  </a>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="close">&times;</button>
+    <img class="lightbox-img" id="img-foco" src="" alt="Preview">
+  </div>
+
+  <script src="assets/js/inner.js"></script>
+  <script>
+    const galleryGrid = document.getElementById('galeria-fotos');
+    const galleryLightbox = document.getElementById('lightbox');
+    const galleryImgFoco = document.getElementById('img-foco');
+    const galleryCloseBtn = document.getElementById('close');
+
+    // ==========================================
+    // CONFIGURAÇÃO DO ÁLBUM DEVOCIONAL
+    // ==========================================
+    const quantidadeDeFotos = 94; 
+    const nomeDaPasta = 'devocional'; 
+    // ==========================================
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 1; i <= quantidadeDeFotos; i++) {
+      const div = document.createElement('div');
+      div.className = 'photo-item';
+      
+      div.innerHTML = `<img 
+        src="assets/images/${nomeDaPasta}/dev%20(${i}).avif" 
+        alt="Foto ${i}" 
+        loading="lazy" 
+        decoding="async"
+      >`;
+
+      div.onclick = function() {
+        const img = this.querySelector('img');
+        if(img && img.src) {
+          galleryImgFoco.src = img.src;
+          galleryLightbox.classList.add('open');
+        }
+      };
+      fragment.appendChild(div);
+    }
+    
+    galleryGrid.appendChild(fragment);
+
+    galleryCloseBtn.onclick = function() {
+      galleryLightbox.classList.remove('open');
+      setTimeout(() => { galleryImgFoco.src = ""; }, 300);
+    };
+
+    galleryLightbox.onclick = function(e) {
+      if (e.target === galleryLightbox) {
+        galleryLightbox.classList.remove('open');
+        setTimeout(() => { galleryImgFoco.src = ""; }, 300);
+      }
+    };
+  </script>
+</body>
+</html>
